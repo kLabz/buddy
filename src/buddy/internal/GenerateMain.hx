@@ -31,7 +31,7 @@ class GenerateMain
 		if (buddySuites == null || buddySuites.expr.equals(EConst(CIdent("null")))) {
 			var buddyInterface = cls.interfaces.find(function(f) return f.t.get().name == 'Buddy');
 			if (buddyInterface == null) {
-				if (cls.superClass.t != null && cls.superClass.t.get().name == "SingleSuite")
+				if (hasAncestor(cls, "SingleSuite"))
 					buddySuites = macro [$p{cls.pack.concat([cls.name])}];
 				else
 					error();
@@ -159,14 +159,25 @@ class GenerateMain
 
 		for (c in classes) {
 			if (c.meta.has("exclude")) continue;
-			if (c.superClass != null && c.superClass.t.get().name == "BuddySuite")
-			{
+			if (hasAncestor(c, "BuddySuite")) {
 				if (c.meta.has("include")) include.push(c);
 				else output.push(c);
 			}
 		}
 
 		return include.length > 0 ? include : output;
+	}
+
+	private static function hasAncestor(cls : ClassType, ancestor : String) : Bool {
+		if (cls.superClass == null) return false;
+
+		var superClass = cls.superClass.t;
+
+		if (superClass != null)
+			if (superClass.get().name == ancestor) return true;
+			else return hasAncestor(superClass.get(), ancestor);
+
+		return false;
 	}
 	
 	private static function flashCI() 
