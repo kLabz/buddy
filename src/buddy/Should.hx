@@ -8,6 +8,12 @@ import python.internal.UBuiltins;
 import python.lib.Builtins;
 #end
 
+#if haxe4
+import Std.isOfType;
+#else
+import Std.is as isOfType;
+#end
+
 using Lambda;
 using StringTools;
 
@@ -454,7 +460,7 @@ class ShouldFunctions
 		{
 			exception = e;
 			exceptionName = Type.getClassName(Type.getClass(e));
-			caught = Std.is(e, type);
+			caught = isOfType(e, type);
 		}
 		
 		if (exceptionName == null) exceptionName = "no exception";
@@ -480,8 +486,8 @@ class ShouldFunctions
 
 	private function quote(v : Dynamic)
 	{
-		if (Std.is(v, String)) return '"$v"';
-		if (Std.is(v, List)) return Std.string(Lambda.array(v));
+		if (isOfType(v, String)) return '"$v"';
+		if (isOfType(v, List)) return Std.string(Lambda.array(v));
 		return Std.string(v);
 	}
 
@@ -530,16 +536,16 @@ class Should<T>
 
 	public function beType(type : Dynamic, ?p : PosInfos)
 	{
-		test(Std.is(value, type), p,
+		test(isOfType(value, type), p,
 			'Expected ${quote(value)} to be type ${quote(type)}',
 			'Expected ${quote(value)} not to be type ${quote(type)}'
 		);
 	}
-	
+
 	private function quote(v : Dynamic)
 	{
-		if (Std.is(v, String)) return '"$v"';
-		if (Std.is(v, List)) return Std.string(Lambda.array(v));
+		if (isOfType(v, String)) return '"$v"';
+		if (isOfType(v, List)) return Std.string(Lambda.array(v));
 		return Std.string(v);
 	}
 

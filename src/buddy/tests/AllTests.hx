@@ -13,6 +13,12 @@ import promhx.Promise;
 import Slambda.fn;
 import utest.Assert;
 
+#if haxe4
+import Std.isOfType;
+#else
+import Std.is as isOfType;
+#end
+
 using buddy.Should;
 using Slambda;
 using StringTools;
@@ -109,9 +115,9 @@ class TestBasicFeatures extends BuddySuite
 				"str".should.beType(String);
 				new EmptyTestClass().should.beType(EmptyTestClass);
 				color1.should.beType(Color);
-				color2.should.not.beType(Int); 
-				
-				Std.is([1, 2, 3], Array).should.be(true);
+				color2.should.not.beType(Int);
+
+				isOfType([1, 2, 3], Array).should.be(true);
 				// Problem on C#:
 				//[1, 2, 3].should.beType(Array);
 			});
